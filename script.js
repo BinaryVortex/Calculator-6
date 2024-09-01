@@ -1,5 +1,5 @@
 let display = document.getElementById('display');
-let currentInput = '';
+let currentInput = '0';
 let operatorClicked = false;
 let lastInput = '';
 
@@ -9,9 +9,15 @@ function inputValue(value) {
         return;
     }
 
+    // Clear input if operator was just clicked
     if (operatorClicked && !isOperator(value)) {
         currentInput = '';
         operatorClicked = false;
+    }
+
+    // Prevent leading zeros unless the input is '0.'
+    if (currentInput === '0' && value !== '.') {
+        currentInput = '';
     }
 
     currentInput += value;
@@ -20,14 +26,14 @@ function inputValue(value) {
 }
 
 function clearDisplay() {
-    currentInput = '';
+    currentInput = '0';
     display.textContent = '0';
     lastInput = '';
 }
 
 function deleteLast() {
-    currentInput = currentInput.slice(0, -1);
-    display.textContent = currentInput || '0';
+    currentInput = currentInput.slice(0, -1) || '0';
+    display.textContent = currentInput;
     lastInput = currentInput.slice(-1);
 }
 
@@ -38,7 +44,7 @@ function calculateResult() {
         display.textContent = currentInput;
     } catch (e) {
         display.textContent = 'Error';
-        currentInput = '';
+        currentInput = '0';
     }
     operatorClicked = true;
     lastInput = '';
